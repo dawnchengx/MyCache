@@ -1,16 +1,18 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
 
-	"github.com/MyCache/objects"
+	"github.com/dawnchengx/MyCache/heartbeat"
+	"github.com/dawnchengx/MyCache/objects"
 )
 
 func main() {
-	fmt.Println()
+	go heartbeat.StartHeartbeat()
+	go locate.StartLocate()
 	http.HandleFunc("/objects/", objects.Handler)
+	http.HandleFunc("/locate/", locate.Handler)
 	log.Fatal(http.ListenAndServe(os.Getenv("LISTEN_ADDRESS"), nil))
 }
